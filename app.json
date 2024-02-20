@@ -3,9 +3,15 @@
     "scheme": "acme",
     "userInterfaceStyle": "automatic",
     "orientation": "default",
+    "icon": "./src/assets/images/icon.png",
     "web": {
       "output": "static",
       "bundler": "metro"
+    },
+    "splash":{
+      "backgroundColor":"#FFB832",
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "cover"
     },
     "plugins": [
       [
@@ -16,6 +22,20 @@
       ]
     ],
     "name": "Dibba",
-    "slug": "Dibba"
+    "slug": "Dibba",
+    "extra": {
+      "router": {
+        "origin": "https://n"
+      },
+      "eas": {
+        "projectId": "b00fd3ba-aa96-4ce9-bb26-4ab8f07e34fa"
+      }
+    },
+    "android": {
+      "package": "com.prasadkatkade.dibba",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/images/icon.png"
+      }
+    }
   }
 }

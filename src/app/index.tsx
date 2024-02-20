@@ -1,15 +1,12 @@
 import { Link } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Image, Text, View } from "react-native";
 
 export default function Page() {
-  const { top } = useSafeAreaInsets();
   return (
-    <View className="flex flex-1">
-      <View style={{ paddingTop: top }}>
-        <Text className="text-2xl text-orange-800">Dibba</Text>
-      </View>
+    <View className="flex flex-1 bg-[#FFB832]">
+      <Text className="p-8 text-2xl text-orange-400">Dibba</Text>
+      <Image source={require("../assets/images/icon.png")} className="h-full w-full"/>
     </View>
   );
 }

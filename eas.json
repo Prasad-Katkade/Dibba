@@ -1,16 +1,18 @@
 {
-  "cli": {
-    "version": ">= 6.0.0"
-  },
-  "build": {
-    "local": {
-      "android": {
-        "buildType": "apk"
-      }
+    "cli": {
+      "version": ">= 6.0.0"
     },
-    "production": {}
-  },
-  "submit": {
-    "production": {}
+    "build": {
+      "local": {
+        "android": {
+          "buildType": "apk"
+        }
+      },
+      "production": {}
+    },
+    "submit": {
+      "production": {}
+    }
   }
-}
+  
+  
