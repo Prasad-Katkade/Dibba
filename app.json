@@ -8,8 +8,8 @@
       "output": "static",
       "bundler": "metro"
     },
-    "splash":{
-      "backgroundColor":"#FFB832",
+    "splash": {
+      "backgroundColor": "#FFB832",
       "image": "./src/assets/images/splash.png",
       "resizeMode": "cover"
     },
@@ -19,7 +19,8 @@
         {
           "origin": "https://n"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "name": "Dibba",
     "slug": "Dibba",
