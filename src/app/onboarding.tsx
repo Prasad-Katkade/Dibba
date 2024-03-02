@@ -3,6 +3,7 @@ import OnboardingItem from "@/components/OnboardingItem";
 import OnboardingPaginator from "@/components/OnboardingPaginator";
 import { OnboardingSlide } from "@/types";
 import { AntDesign, Entypo } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import LottieView from "lottie-react-native";
 import React, { useEffect, useRef, useState } from "react";
@@ -27,9 +28,11 @@ export default function onboarding() {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
   const slideRef = useRef(null);
   const { t } = useTranslation();
-  const scrollTo = () => {
+  const navigateTo = () => {
     if (currentIndex < slides.length - 1) {
       slideRef.current.scrollToIndex({ index: currentIndex + 1 });
+    }else{
+      router.replace("/authentication");
     }
   };
   const slides: OnboardingSlide[] = [
@@ -123,7 +126,7 @@ export default function onboarding() {
         <OnboardingPaginator data={slides} scrollX={scrollX} />
         <TouchableOpacity
           className="bg-stone-800 flex flex-row gap-2  py-4 px-10 rounded-3xl"
-          onPress={scrollTo}
+          onPress={navigateTo}
         >
           <Text className="text-white text-lg">{getTitle()}</Text>
           <AntDesign name="rightcircle" size={24} color="white" />

@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import LottieView from "lottie-react-native";
 import React, { useEffect, useRef } from "react";
 import { Text, View } from "react-native";
+import {Poppins_600SemiBold,Poppins_400Regular} from "@expo-google-fonts/poppins"
 
 SplashScreen.preventAutoHideAsync();
 
@@ -13,7 +14,9 @@ export default function Page() {
   const animation = useRef(null);
   const [fontsLoaded] = useFonts({
     Kalam_400Regular,
-    Kalam_700Bold
+    Kalam_700Bold,
+    Poppins_600SemiBold,
+    Poppins_400Regular
   });
   useEffect(() => {
     // for custom animation refer animated api https://github.com/lottie-react-native/lottie-react-native#usage
@@ -23,11 +26,15 @@ export default function Page() {
       await SplashScreen.hideAsync();
     }, 1000);
 
-    setTimeout(() => {
-      router.replace("/onboarding");
-    }, 2500);
+ 
   }, []);
   // FFAA33 FFAE42
+  useEffect(()=>{
+    setTimeout(() => {
+      if(fontsLoaded) 
+        router.replace("/authentication");
+    }, 2500);
+  },[fontsLoaded])
   return (
     <View className="min-h-full min-w-full h-screen w-full py-11 px-10 bg-[#FFAE42]">
       <StatusBar style="dark" />
