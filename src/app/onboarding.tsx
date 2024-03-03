@@ -17,7 +17,7 @@ import {
   View
 } from "react-native";
 
-export default function onboarding() {
+export default function Onboarding() {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [modalVisible, setModalVisible] = useState<boolean>(false);

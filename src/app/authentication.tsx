@@ -1,32 +1,18 @@
-import {
-  View,
-  Text,
-  BackHandler,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
-import React, { useEffect, useState } from "react";
 import { router } from "expo-router";
-import * as WebBrowser from "expo-web-browser";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import React, { useEffect } from "react";
+import { BackHandler, Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
 
-// android client - 361791862762-4bbedt66r5mt9rr1e8i5ak2u2ti2kqar.apps.googleusercontent.com
-// web client - 361791862762-edg90jugc3kkncvu4tca013mcad3hg42.apps.googleusercontent.com
+import { useAsyncStorage } from "@/utils/useAsyncStorage";
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 
- // eas json "developmentClient": true,
-WebBrowser.maybeCompleteAuthSession();
-
-export default function authentication() {
+export default function Authentication() {
   const { width } = Dimensions.get("window");
-  const [userInfo,setUserInfo]=useState(null);
+  const { storeData } = useAsyncStorage();
 
-  const configGoogleSignIn=()=>{
-    GoogleSignin.configure({
-      webClientId:"361791862762-edg90jugc3kkncvu4tca013mcad3hg42.apps.googleusercontent.com"
-    })
-  }
-  
+  const configGoogleSignIn = () => {
+    GoogleSignin.configure();
+  };
+
   const navigateToOnboarding = (): boolean => {
     router.replace("/onboarding");
     return true;
@@ -34,35 +20,38 @@ export default function authentication() {
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", navigateToOnboarding);
     return () => {
-      BackHandler.removeEventListener(
-        "hardwareBackPress",
-        navigateToOnboarding
-      );
+      BackHandler.removeEventListener("hardwareBackPress", navigateToOnboarding);
     };
   }, [BackHandler]);
 
-  useEffect(()=>{
-    configGoogleSignIn()
-  },[])
+  useEffect(() => {
+    configGoogleSignIn();
+  }, []);
 
-  const signIn=async ()=>{
-    try{
-      console.log("signing in");
-      await GoogleSignin.hasPlayServices()
-      const res=await GoogleSignin.signIn()
-      setUserInfo(res)
-      console.log("info",res);
-      
-    }catch(e){
-      console.log("error",e);
+  const showToast = (type, title, desc) => {
+    console.log(type,title,desc);
+  
+  };
+
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const res = await GoogleSignin.signIn();
+      if (res) storeData("isSignedInBefore", "true");
+      showToast("success", "Success", "Succesfully Signed In");
+      router.replace("/main/(tabs)/browse");
+    } catch (error) {
+      switch (error.code) {
+        case statusCodes.SIGN_IN_CANCELLED:
+          showToast("error", "SIGN IN CANCELLED", "User Sign In is required");
+          break;
+        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+          showToast("error", "PLAY SERVICES NOT AVAILABLE", "Google Play Services are needed");
+          break;
+      }
+      console.log("Error", error.code);
     }
-  }
-
-  const signOut=()=>{
-    console.log("logout");
-    GoogleSignin.revokeAccess();
-    GoogleSignin.signOut();
-  }
+  };
 
   return (
     <View className="flex-1 bg-[#FFAA33] h-full w-full items-center justify-between pt-11 pb-1">
@@ -74,17 +63,13 @@ export default function authentication() {
         />
       </View>
       <View className="min-h-[100px] flex ">
-        <Text
-          className="text-center text-4xl  py-4 text-black"
-          style={{ fontFamily: "Kalam_400Regular" }}
-        >
-          Dibba {userInfo?.user ? JSON.stringify(userInfo.user):""}
+        <Text className="text-center text-4xl  py-4 text-black" style={{ fontFamily: "Kalam_400Regular" }}>
+          Dibba
         </Text>
         <TouchableOpacity
           className="bg-stone-800 flex flex-row gap-1 py-4 px-10 rounded-3xl"
           onPress={() => {
-            console.log("click");
-            signIn()
+            signIn();
           }}
         >
           <Image
@@ -92,30 +77,8 @@ export default function authentication() {
             className="h-[25px] w-[25px]"
             style={{ objectFit: "contain" }}
           />
-          <Text
-            className="text-white font-bold"
-            style={{ fontFamily: "Poppins_600SemiBold", fontSize: 16 }}
-          >
+          <Text className="text-white font-bold" style={{ fontFamily: "Poppins_600SemiBold", fontSize: 16 }}>
             et started with Google
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="bg-stone-800 mt-1 flex flex-row gap-1 py-4 px-10 rounded-3xl"
-          onPress={() => {
-            console.log("click");
-            signOut()
-          }}
-        >
-          <Image
-            source={require("../assets/images/google.png")}
-            className="h-[25px] w-[25px]"
-            style={{ objectFit: "contain" }}
-          />
-          <Text
-            className="text-white font-bold"
-            style={{ fontFamily: "Poppins_600SemiBold", fontSize: 16 }}
-          >
-           Logout
           </Text>
         </TouchableOpacity>
       </View>
